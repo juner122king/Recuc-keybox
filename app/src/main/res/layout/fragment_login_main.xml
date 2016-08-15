@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/iv1"
+        android:layout_width="@dimen/ad_w"
+        android:layout_height="@dimen/ad_h"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/ad1" />
+
+    <LinearLayout
+        android:id="@+id/ll_login_view"
+        android:layout_width="@dimen/ad_w"
+        android:layout_height="@dimen/ad_h"
+        android:layout_toRightOf="@id/iv1"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <ImageView
+
+        android:id="@+id/iv2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ad_h"
+        android:layout_below="@id/iv1"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ad2" />
+</RelativeLayout>
