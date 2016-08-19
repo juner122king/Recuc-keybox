@@ -6,5 +6,5 @@
     <dimen name="ad_w">625px</dimen>
     <dimen name="ad_h">300px</dimen>
 
-
+    <dimen name="weima">180dp</dimen>
 </resources>

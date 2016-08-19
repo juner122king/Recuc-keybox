@@ -20,6 +20,9 @@ public class LoginActivity extends Activity {
 
     ConnectionChangeReceiver connectionChangeReceiver;
 
+
+    private LoginPresenter mLoginPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,8 @@ public class LoginActivity extends Activity {
     void initView() {
         loginMainFragment = new LoginMainFragment();
         getFragmentManager().beginTransaction().replace(R.id.rl, loginMainFragment).commit();
+        mLoginPresenter = new LoginPresenter(loginMainFragment);
+
         //动态注册广播消息
         connectionChangeReceiver = new ConnectionChangeReceiver(handler);
         registerReceiver(connectionChangeReceiver, new IntentFilter(ACTION));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
     <ImageView
@@ -10,16 +10,29 @@
         android:layout_height="@dimen/ad_h"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
-        android:src="@mipmap/ad1" />
+        android:src="@mipmap/ad1"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_login_view"
         android:layout_width="@dimen/ad_w"
         android:layout_height="@dimen/ad_h"
         android:layout_toRightOf="@id/iv1"
         android:orientation="vertical">
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/text_gr_s"
+            android:gravity="center"
+            android:text="微信扫一扫登录"
+            android:textColor="@android:color/background_dark"
+            android:textSize="21sp"/>
+
+        <include
+            layout="@layout/activity_login_rl"/>
+    </RelativeLayout>
 
     <ImageView
 
@@ -28,5 +41,5 @@
         android:layout_height="@dimen/ad_h"
         android:layout_below="@id/iv1"
         android:scaleType="fitXY"
-        android:src="@mipmap/ad2" />
+        android:src="@mipmap/ad2"/>
 </RelativeLayout>

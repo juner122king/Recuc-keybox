@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_logo"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@null"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+
+    <ImageView
+        android:id="@+id/iv_wx"
+        android:layout_width="@dimen/weima"
+        android:layout_height="@dimen/weima"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tv_notnetwork"
+        android:layout_width="@dimen/weima"
+        android:layout_height="@dimen/weima"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="设备无网络"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20sp"
+        android:visibility="visible"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_wx"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="扫码成功后若10秒内未进入操作页面，请重新扫码!"
+        android:textSize="16sp"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tv_uuid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="dafdfafasdf"/>
+
+
+</RelativeLayout>
