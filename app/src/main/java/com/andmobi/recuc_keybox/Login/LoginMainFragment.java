@@ -1,25 +1,29 @@
 package com.andmobi.recuc_keybox.Login;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.andmobi.recuc_keybox.R;
+import com.andmobi.recuc_keybox.userOrder.OrderActivity;
 import com.andmobi.recuc_keybox.util.DebugUtils;
 import com.andmobi.recuc_keybox.util.ImageLoader;
 import com.andmobi.recuc_keybox.util.Utils;
+import com.trello.rxlifecycle.components.RxFragment;
 
 /**
  * Description:
  * Created by andmobi003 on 2016/8/15 14:31
  */
-public class LoginMainFragment extends Fragment implements LoginContract.View {
+public class LoginMainFragment extends RxFragment implements LoginContract.View {
     LoginContract.Presenter mPresenter;
     ImageView mIv_code;//二维码控件
+    TextView mTextView_notNet;
 
     @Nullable
     @Override
@@ -27,13 +31,15 @@ public class LoginMainFragment extends Fragment implements LoginContract.View {
         DebugUtils.d(getClass().getSimpleName(), "onCreateView");
         View root = inflater.inflate(R.layout.fragment_login_main, container, false);
         mIv_code = (ImageView) root.findViewById(R.id.iv_wx);
+        mTextView_notNet = (TextView) root.findViewById(R.id.tv_notnetwork);
         return root;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.showUserWxLogin();
+        DebugUtils.d(getClass().getSimpleName(), "onResume");
+        mPresenter.cycleWxPoll(this);
     }
 
     /**
@@ -42,14 +48,27 @@ public class LoginMainFragment extends Fragment implements LoginContract.View {
      */
     @Override
     public void onShowUserWxLogin(String url) {
+
+        mTextView_notNet.setVisibility(View.GONE);
+        mIv_code.setVisibility(View.VISIBLE);
+
         ImageLoader.getInstance().dispplayImage(url, mIv_code);
 
-        mPresenter.cycleWxPoll();
     }
 
     @Override
-    public void onSuccessWxLogin() {
+    public void onShowNotNet() {
+        mIv_code.setVisibility(View.GONE);
+        mTextView_notNet.setVisibility(View.VISIBLE);
 
+    }
+
+    /**
+     * 用户扫码成功 跳转activity
+     */
+    @Override
+    public void onSuccessWxLogin() {
+        startActivity(new Intent(getActivity(), OrderActivity.class));
     }
 
 

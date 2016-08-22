@@ -5,6 +5,7 @@
     <dimen name="activity_top_bar_marginLeft">40dp</dimen>
     <dimen name="ad_w">625px</dimen>
     <dimen name="ad_h">300px</dimen>
-
+    <dimen name="app_corners">5dp</dimen>
     <dimen name="weima">180dp</dimen>
+    <dimen name="activity_top_bar_marginTop">20dp</dimen>
 </resources>

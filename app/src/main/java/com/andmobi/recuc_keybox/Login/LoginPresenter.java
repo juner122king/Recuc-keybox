@@ -9,6 +9,8 @@ import com.andmobi.recuc_keybox.modle.KeyBox;
 import com.andmobi.recuc_keybox.modle.LoginInfo;
 import com.andmobi.recuc_keybox.util.DebugUtils;
 import com.andmobi.recuc_keybox.util.Utils;
+import com.trello.rxlifecycle.FragmentEvent;
+import com.trello.rxlifecycle.components.RxFragment;
 
 import java.util.concurrent.TimeUnit;
 
@@ -70,6 +72,12 @@ public class LoginPresenter implements Presenter {
     }
 
     @Override
+    public void showNotNet() {
+
+        mView.onShowNotNet();
+    }
+
+    @Override
     public void wxPoll() {
         getKeyBoxInfo()
                 .flatMap(new Func1<KeyBox, Observable<Base<LoginInfo>>>() {
@@ -89,9 +97,10 @@ public class LoginPresenter implements Presenter {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        if (s.equals(1))
+                        if (s.equals("1")) {
                             DebugUtils.d(mView.getClass().getSimpleName(), "微信登录成功");
-                        else
+                            mView.onSuccessWxLogin();
+                        } else
                             DebugUtils.d(mView.getClass().getSimpleName(), "没有微信登录");
                     }
                 }, new Action1<Throwable>() {
@@ -104,10 +113,11 @@ public class LoginPresenter implements Presenter {
     }
 
     @Override
-    public void cycleWxPoll() {
+    public void cycleWxPoll(RxFragment rxFragment) {
 
-        Observable.interval(1, TimeUnit.SECONDS)
+        Observable.interval(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())//生产线程
+                .compose(rxFragment.<Long>bindUntilEvent(FragmentEvent.PAUSE))//订阅事件与Fragment生命周期同步
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
                     @Override
@@ -115,8 +125,12 @@ public class LoginPresenter implements Presenter {
                         DebugUtils.d(mView.getClass().getSimpleName(), String.format("第%d次轮询", aLong));
                         wxPoll();
                     }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
                 });
-
 
     }
 

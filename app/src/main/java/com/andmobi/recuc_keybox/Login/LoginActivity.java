@@ -55,9 +55,11 @@ public class LoginActivity extends Activity {
             switch (msg.what) {
                 case 1:
                     Toast.makeText(LoginActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    mLoginPresenter.showUserWxLogin();
                     break;
                 case 2:
                     Toast.makeText(LoginActivity.this, "2", Toast.LENGTH_SHORT).show();
+                    mLoginPresenter.showNotNet();
                     break;
             }
 

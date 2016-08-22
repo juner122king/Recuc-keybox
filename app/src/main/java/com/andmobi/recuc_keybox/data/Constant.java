@@ -7,8 +7,8 @@ package com.andmobi.recuc_keybox.data;
 public class Constant {
 
 
-//    public final static String BASEURL = "http://zhaojunfu.wicp.net/cuc-server/rest/";
-    public final static String BASEURL = "http://p.carucool.com/rest/";
+    public final static String BASEURL = "http://zhaojunfu.wicp.net/cuc-server/rest/";
+//    public final static String BASEURL = "http://p.carucool.com/rest/";
     public final static String REST = BASEURL;
 
     public static final String APP_SERVICE_URL_WXQRCODE = "/core/login/boxWxImg?keyboxId=";//钥匙箱微信扫码登录二维码
