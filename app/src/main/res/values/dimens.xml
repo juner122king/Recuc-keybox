@@ -8,4 +8,5 @@
     <dimen name="app_corners">5dp</dimen>
     <dimen name="weima">180dp</dimen>
     <dimen name="activity_top_bar_marginTop">20dp</dimen>
+    <dimen name="listitem_h">80dp</dimen>
 </resources>

@@ -4,6 +4,9 @@ import com.andmobi.recuc_keybox.modle.Base;
 import com.andmobi.recuc_keybox.modle.BaseList;
 import com.andmobi.recuc_keybox.modle.KeyBox;
 import com.andmobi.recuc_keybox.modle.LoginInfo;
+import com.andmobi.recuc_keybox.modle.UserOrder;
+
+import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -32,6 +35,19 @@ public interface MainApi {
      */
     @GET("core/login/wxPoll")
     Observable<Base<LoginInfo>> pollwx(@Query("keyboxId") int keyboxId);
+
+
+    /**
+     * 获取用户钥匙列表
+     *
+     * @param keyboxId 钥匙箱id  获取：getKeyBoxInfo().getId()
+     * @param token    用户登录后的唯一   获取：pollwx().getToken()
+     * @param status   用于识别取或放:
+     *                 status=5  取  get
+     *                 status=1  放  set
+     */
+    @GET("core/order/query")
+    Observable<BaseList<List<UserOrder>>> queryUserKeyList(@Query("token") String token, @Query("keyboxId") String keyboxId, @Query("status") int status);
 
 
 }

@@ -2,7 +2,10 @@ package com.andmobi.recuc_keybox.userOrder;
 
 import com.andmobi.recuc_keybox.BasePresenter;
 import com.andmobi.recuc_keybox.BaseView;
+import com.andmobi.recuc_keybox.modle.UserOrder;
 import com.trello.rxlifecycle.components.RxActivity;
+
+import java.util.List;
 
 /**
  * Description:
@@ -15,21 +18,36 @@ public class OrderContract {
 
         void startCountdown();
 
+        void initCountdown();
+
+        void getOrderList();
+
+        void setOrderList();
     }
 
     interface View extends BaseView<Presenter> {
-        void onHideSetList();
+        void onHideSetListView();
 
-        void onHideGetList();
+        void onHideGetListView();
 
-        void onShowSetList();
+        void onShowSetListView();
 
-        void onShowGetList();
+        void onShowGetListView();
 
         void onSetNumber(Long number);
 
-        RxActivity getThis();
 
         void onFinish();
+
+        void onInitView();
+
+        void onShowGetOrderListData(List<UserOrder> orderList, int optType);
+
+        void onShowSetOrderListData(List<UserOrder> orderList, int optType);
+
+
+        RxActivity getThis();
+
+        String getToken();
     }
 }

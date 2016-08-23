@@ -12,6 +12,9 @@ public class App extends Application {
     public static Context mContext;
     //设备唯一标识码
     public static String UUID;
+
+    public final static long COUNTDOWN = 60;//用户操作时间
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -32,6 +32,6 @@ public class LoginContract {
 
         void onShowNotNet();//无网络 显示文字
 
-        void onSuccessWxLogin();//用户微信登录成功
+        void onSuccessWxLogin(String token);//用户微信登录成功
     }
 }

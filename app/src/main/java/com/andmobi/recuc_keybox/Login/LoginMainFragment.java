@@ -67,8 +67,10 @@ public class LoginMainFragment extends RxFragment implements LoginContract.View 
      * 用户扫码成功 跳转activity
      */
     @Override
-    public void onSuccessWxLogin() {
-        startActivity(new Intent(getActivity(), OrderActivity.class));
+    public void onSuccessWxLogin(String token) {
+        Intent intent = new Intent(getActivity(), OrderActivity.class);
+        intent.putExtra("token", token);
+        startActivity(intent);
     }
 
 

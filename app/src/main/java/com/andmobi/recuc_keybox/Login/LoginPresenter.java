@@ -1,5 +1,6 @@
 package com.andmobi.recuc_keybox.Login;
 
+import com.andmobi.recuc_keybox.App;
 import com.andmobi.recuc_keybox.Login.LoginContract.Presenter;
 import com.andmobi.recuc_keybox.data.Constant;
 import com.andmobi.recuc_keybox.data.net.Network;
@@ -40,7 +41,7 @@ public class LoginPresenter implements Presenter {
     @Override
     public Observable<KeyBox> getKeyBoxInfo() {
 
-        return Network.getMainApi().getKeyBoxInfo("6fb4f13eb7760f1f")
+        return Network.getMainApi().getKeyBoxInfo(App.UUID)
                 .map(new Func1<BaseList<KeyBox>, KeyBox>() {
                     @Override
                     public KeyBox call(BaseList<KeyBox> keyboxs) {
@@ -86,22 +87,19 @@ public class LoginPresenter implements Presenter {
                         return Network.getMainApi().pollwx(keyBox.getId());
                     }
                 })
-                .map(new Func1<Base<LoginInfo>, String>() {
+                .filter(new Func1<Base<LoginInfo>, Boolean>() {
                     @Override
-                    public String call(Base<LoginInfo> loginInfoBase) {
-                        return loginInfoBase.getStatus().toString();
+                    public Boolean call(Base<LoginInfo> loginInfoBase) {
+                        return loginInfoBase.getStatus() == 1;//只返回登录成功的数据
                     }
                 })
                 .subscribeOn(Schedulers.io())//生产线程
                 .observeOn(AndroidSchedulers.mainThread())//消费线程
-                .subscribe(new Action1<String>() {
+                .subscribe(new Action1<Base<LoginInfo>>() {
                     @Override
-                    public void call(String s) {
-                        if (s.equals("1")) {
-                            DebugUtils.d(mView.getClass().getSimpleName(), "微信登录成功");
-                            mView.onSuccessWxLogin();
-                        } else
-                            DebugUtils.d(mView.getClass().getSimpleName(), "没有微信登录");
+                    public void call(Base<LoginInfo> loginInfoBase) {
+                        DebugUtils.d(mView.getClass().getSimpleName(), "微信登录成功");
+                        mView.onSuccessWxLogin(loginInfoBase.getDatas().getToken());
                     }
                 }, new Action1<Throwable>() {
                     @Override

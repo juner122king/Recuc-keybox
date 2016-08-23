@@ -7,11 +7,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andmobi.recuc_keybox.R;
+import com.andmobi.recuc_keybox.modle.UserOrder;
 import com.andmobi.recuc_keybox.util.Utils;
+import com.jakewharton.rxbinding.view.RxView;
 import com.trello.rxlifecycle.components.RxActivity;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
 public class OrderActivity extends RxActivity implements OrderContract.View {
 
@@ -46,6 +51,7 @@ public class OrderActivity extends RxActivity implements OrderContract.View {
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         mPresenter = new OrderPresenter(this);
+        mPresenter.start();
 
     }
 
@@ -56,32 +62,56 @@ public class OrderActivity extends RxActivity implements OrderContract.View {
     }
 
     @Override
-    public void onHideSetList() {
+    public void onInitView() {
+        RxView.clicks(tvBacklogin).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                onFinish();
+            }
+        });
+        mPresenter.getOrderList();
+        mPresenter.setOrderList();
+    }
+
+    @Override
+    public void onShowGetOrderListData(List<UserOrder> orderList, int optType) {
+        lvKeyboxlistGet.setAdapter(new OrderListAdapter(orderList, this, optType));
+    }
+
+    @Override
+    public void onShowSetOrderListData(List<UserOrder> orderList, int optType) {
+        lvKeyboxlistSet.setAdapter(new OrderListAdapter(orderList, this, optType));
+    }
+
+
+    @Override
+    public void onHideSetListView() {
         lvKeyboxlistSet.setVisibility(View.GONE);
         tvNotSet.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onHideGetList() {
+    public void onHideGetListView() {
         lvKeyboxlistGet.setVisibility(View.GONE);
         tvNotGet.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onShowSetList() {
+    public void onShowSetListView() {
         lvKeyboxlistSet.setVisibility(View.VISIBLE);
         tvNotSet.setVisibility(View.GONE);
     }
 
     @Override
-    public void onShowGetList() {
+    public void onShowGetListView() {
         lvKeyboxlistGet.setVisibility(View.VISIBLE);
         tvNotGet.setVisibility(View.GONE);
     }
 
     @Override
     public void onSetNumber(Long number) {
-        tvNumber.setText(String.valueOf(number));
+        tvNumber.setText(String.valueOf("剩余操作时间: " + number));
+
     }
 
     @Override
@@ -90,8 +120,15 @@ public class OrderActivity extends RxActivity implements OrderContract.View {
     }
 
     @Override
+    public String getToken() {
+        String Token = getIntent().getStringExtra("token");
+        return Token;
+    }
+
+    @Override
     public void onFinish() {
         finish();
     }
+
 
 }
