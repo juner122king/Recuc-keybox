@@ -23,6 +23,8 @@ public class OrderContract {
         void getOrderList();
 
         void setOrderList();
+
+        void keyAiton(int ownerViliageId, String getOwnerViliage, String orderNo, int optType);
     }
 
     interface View extends BaseView<Presenter> {

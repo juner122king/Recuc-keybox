@@ -1,10 +1,14 @@
 package com.andmobi.recuc_keybox.userOrder;
 
+import android.widget.Toast;
+
 import com.andmobi.recuc_keybox.App;
 import com.andmobi.recuc_keybox.data.net.Network;
+import com.andmobi.recuc_keybox.modle.Base;
 import com.andmobi.recuc_keybox.modle.BaseList;
 import com.andmobi.recuc_keybox.modle.KeyBox;
 import com.andmobi.recuc_keybox.modle.UserOrder;
+import com.andmobi.recuc_keybox.modle.UserOrder2;
 import com.andmobi.recuc_keybox.util.DebugUtils;
 import com.andmobi.recuc_keybox.util.Utils;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -27,9 +31,7 @@ public class OrderPresenter implements OrderContract.Presenter {
 
 
     private OrderContract.View mView;
-
     private long countdown;
-    private int optType;
     private static final int STATUS_GAT = 5;
     private static final int STATUS_SAT = 1;
 
@@ -88,7 +90,6 @@ public class OrderPresenter implements OrderContract.Presenter {
 
     @Override
     public void getOrderList() {
-        optType = 1;
         Network.getMainApi().getKeyBoxInfo(App.UUID)
                 .map(new Func1<BaseList<KeyBox>, KeyBox>() {
                     @Override
@@ -125,7 +126,7 @@ public class OrderPresenter implements OrderContract.Presenter {
                         else {
 
                             mView.onShowGetListView();
-                            mView.onShowGetOrderListData(userOrders, optType);
+                            mView.onShowGetOrderListData(userOrders, 1);
                         }
                     }
                 });
@@ -134,7 +135,6 @@ public class OrderPresenter implements OrderContract.Presenter {
 
     @Override
     public void setOrderList() {
-        optType = 2;
         Network.getMainApi().queryUserKeyList(mView.getToken(), "-1", STATUS_SAT)
                 .filter(new Func1<BaseList<List<UserOrder>>, Boolean>() {
                     @Override
@@ -160,10 +160,56 @@ public class OrderPresenter implements OrderContract.Presenter {
                             mView.onHideSetListView();
                         else {
                             mView.onShowSetListView();
-                            mView.onShowSetOrderListData(userOrders, optType);
+                            mView.onShowSetOrderListData(userOrders, 2);
                         }
                     }
                 });
+    }
+
+    @Override
+    public void keyAiton(final int ownerViliageId, final String getOwnerViliage, final String orderNo, final int optType) {
+        Network.getMainApi().getKeyBoxInfo(App.UUID)
+                .map(new Func1<BaseList<KeyBox>, KeyBox>() {
+                    @Override
+                    public KeyBox call(BaseList<KeyBox> keyboxs) {
+                        return keyboxs.getDatas().get(0);
+                    }
+                })
+                .single(new Func1<KeyBox, Boolean>() {
+                    @Override
+                    public Boolean call(KeyBox keyBox) {
+                        return ownerViliageId == 0 || ownerViliageId == keyBox.getViliageId();
+                    }
+                })
+                .flatMap(new Func1<KeyBox, Observable<Base<UserOrder2>>>() {
+                    @Override
+                    public Observable<Base<UserOrder2>> call(KeyBox keyBox) {
+                        return Network.getMainApi().keyOperate(orderNo, optType, mView.getToken(), keyBox.getId());
+                    }
+                })
+                .subscribeOn(Schedulers.io())//生产线程
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Base<UserOrder2>>() {
+                    @Override
+                    public void call(Base<UserOrder2> userOrderBase) {
+
+                        if (userOrderBase.getStatus() == 1) {
+//                            openLock(Integer.valueOf(response.getKeyboxCellNo()));
+//                            mContext.refreshList();
+                            Toast.makeText(mView.getThis(), "操作成功", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(mView.getThis(), "操作失败: " + userOrderBase.getMeta(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        Toast.makeText(mView.getThis(), String.format("请前往订单所在小区%s存放钥匙，或致电客服", getOwnerViliage), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
     }
 
     private List<UserOrder> toListUserOrder(BaseList<List<UserOrder>> listBaseList) {

@@ -5,10 +5,14 @@ import com.andmobi.recuc_keybox.modle.BaseList;
 import com.andmobi.recuc_keybox.modle.KeyBox;
 import com.andmobi.recuc_keybox.modle.LoginInfo;
 import com.andmobi.recuc_keybox.modle.UserOrder;
+import com.andmobi.recuc_keybox.modle.UserOrder2;
 
 import java.util.List;
 
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -50,4 +54,7 @@ public interface MainApi {
     Observable<BaseList<List<UserOrder>>> queryUserKeyList(@Query("token") String token, @Query("keyboxId") String keyboxId, @Query("status") int status);
 
 
+    @FormUrlEncoded
+    @POST("core/order/takeKey")
+    Observable<Base<UserOrder2>> keyOperate(@Field("orderNo") String orderNo, @Field("optType") int optType, @Field("token") String token, @Field("keyboxId") int keyboxId);
 }

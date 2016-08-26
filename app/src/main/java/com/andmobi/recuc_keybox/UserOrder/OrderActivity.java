@@ -75,12 +75,12 @@ public class OrderActivity extends RxActivity implements OrderContract.View {
 
     @Override
     public void onShowGetOrderListData(List<UserOrder> orderList, int optType) {
-        lvKeyboxlistGet.setAdapter(new OrderListAdapter(orderList, this, optType));
+        lvKeyboxlistGet.setAdapter(new OrderListAdapter(orderList, this, optType, mPresenter));
     }
 
     @Override
     public void onShowSetOrderListData(List<UserOrder> orderList, int optType) {
-        lvKeyboxlistSet.setAdapter(new OrderListAdapter(orderList, this, optType));
+        lvKeyboxlistSet.setAdapter(new OrderListAdapter(orderList, this, optType, mPresenter));
     }
 
 

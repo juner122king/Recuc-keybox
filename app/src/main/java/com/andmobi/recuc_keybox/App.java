@@ -13,7 +13,7 @@ public class App extends Application {
     //设备唯一标识码
     public static String UUID;
 
-    public final static long COUNTDOWN = 60;//用户操作时间
+    public final static long COUNTDOWN = 60 * 60;//用户操作时间
 
     @Override
     public void onCreate() {
